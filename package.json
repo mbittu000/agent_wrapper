@@ -1,6 +1,6 @@
 {
   "name": "agent-wrapper",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "A lightweight template for building AI agents with OpenAI Agents SDK. Simplify agent creation with minimal boilerplate code.",
   "type": "module",
   "main": "dist/index.js",
@@ -20,20 +20,23 @@
     "openai",
     "agents",
     "ai",
+    "agent-wrapper",
     "template",
     "sdk",
-    "typescript"
+    "typescript",
+    "ai-agent",
+    "openai-sdk"
   ],
-  "author": "Your Name <your.email@example.com>",
+  "author": "mbittu000",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/openai-agent-template"
+    "url": "https://github.com/mbittu000/agent-wrapper"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/openai-agent-template/issues"
+    "url": "https://github.com/mbittu000/agent-wrapper/issues"
   },
-  "homepage": "https://github.com/yourusername/openai-agent-template#readme",
+  "homepage": "https://github.com/mbittu000/agent-wrapper#readme",
   "engines": {
     "node": ">=18.0.0",
     "bun": ">=1.0.0"
