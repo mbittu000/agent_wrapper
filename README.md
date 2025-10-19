@@ -15,26 +15,26 @@ A lightweight npm package that simplifies building AI agents using the OpenAI Ag
 ## 📦 Installation
 
 ```bash
-npm install agent-wrapper
+npm install agent_wrapper
 ```
 
 Or with your preferred package manager:
 
 ```bash
 # Bun
-bun add agent-wrapper
+bun add agent_wrapper
 
 # Yarn
-yarn add agent-wrapper
+yarn add agent_wrapper
 
 # pnpm
-pnpm add agent-wrapper
+pnpm add agent_wrapper
 ```
 
 ## 🚀 Quick Start
 
 ```typescript
-import AiAgent from 'agent-wrapper';
+import AiAgent from 'agent_wrapper';
 
 // Create an agent with minimal configuration
 const agent = new AiAgent({
@@ -101,7 +101,7 @@ console.log(response);
 ### Basic Chat Agent
 
 ```typescript
-import AiAgent from 'agent-wrapper';
+import AiAgent from 'agent_wrapper';
 
 const chatAgent = new AiAgent({
   key: process.env.OPENAI_API_KEY,
@@ -116,7 +116,7 @@ console.log(response);
 ### Custom API Provider
 
 ```typescript
-import AiAgent from 'agent-wrapper';
+import AiAgent from 'agent_wrapper';
 
 const customAgent = new AiAgent({
   name: 'DataAnalyst',
@@ -133,7 +133,7 @@ console.log(analysis);
 ### With Environment Variables
 
 ```typescript
-import AiAgent from 'agent-wrapper';
+import AiAgent from 'agent_wrapper';
 
 const agent = new AiAgent({
   name: process.env.AGENT_NAME || 'DefaultAgent',
@@ -149,7 +149,7 @@ const result = await agent.runAgent('Write a professional email...');
 ### Using Tools
 
 ```typescript
-import AiAgent from 'agent-wrapper';
+import AiAgent from 'agent_wrapper';
 import { tool } from '@openai/agents';
 import { z } from 'zod';
 
@@ -180,7 +180,7 @@ console.log(result);
 ### Minimal Configuration (All Defaults)
 
 ```typescript
-import AiAgent from 'agent-wrapper';
+import AiAgent from 'agent_wrapper';
 
 // Uses all default values - just needs API key set in environment or passed
 const agent = new AiAgent({
@@ -225,7 +225,7 @@ Load your environment variables:
 
 ```typescript
 import 'dotenv/config';
-import AiAgent from 'agent-wrapper';
+import AiAgent from 'agent_wrapper';
 
 const agent = new AiAgent({
   key: process.env.OPENAI_API_KEY,
@@ -284,7 +284,7 @@ To contribute:
 ## 🐛 Issues & Support
 
 For bugs, feature requests, or questions:
-- Open an issue on [GitHub Issues](https://github.com/mbittu000/agent-wrapper/issues)
+- Open an issue on [GitHub Issues](https://github.com/mbittu000/agent_wrapper/issues)
 - Check existing issues for solutions
 - Provide minimal reproducible examples when reporting bugs
 
@@ -306,7 +306,7 @@ For bugs, feature requests, or questions:
 
 ---
 
-**Package:** agent-wrapper  
+**Package:** agent_wrapper  
 **Version:** 0.1.0  
 **Author:** mbittu000  
-**Repository:** [github.com/mbittu000/agent-wrapper](https://github.com/mbittu000/agent-wrapper)
+**Repository:** [github.com/mbittu000/agent_wrapper](https://github.com/mbittu000/agent_wrapper)

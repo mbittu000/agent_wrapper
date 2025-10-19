@@ -1,5 +1,5 @@
 {
-  "name": "agent-wrapper",
+  "name": "agent_wrapper",
   "version": "0.1.0",
   "description": "A lightweight template for building AI agents with OpenAI Agents SDK. Simplify agent creation with minimal boilerplate code.",
   "type": "module",
@@ -20,7 +20,7 @@
     "openai",
     "agents",
     "ai",
-    "agent-wrapper",
+    "agent_wrapper",
     "template",
     "sdk",
     "typescript",
@@ -31,12 +31,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mbittu000/agent-wrapper"
+    "url": "https://github.com/mbittu000/agent_wrapper"
   },
   "bugs": {
-    "url": "https://github.com/mbittu000/agent-wrapper/issues"
+    "url": "https://github.com/mbittu000/agent_wrapper/issues"
   },
-  "homepage": "https://github.com/mbittu000/agent-wrapper#readme",
+  "homepage": "https://github.com/mbittu000/agent_wrapper#readme",
   "engines": {
     "node": ">=18.0.0",
     "bun": ">=1.0.0"
