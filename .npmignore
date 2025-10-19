@@ -1,0 +1,40 @@
+# dependencies
+node_modules
+bun.lockb
+package-lock.json
+yarn.lock
+
+# source files
+*.ts
+tsconfig.json
+
+# development
+.env
+.env.local
+.env.*.local
+
+# testing
+coverage
+*.lcov
+
+# logs
+logs
+*.log
+
+# git
+.git
+.gitignore
+
+# ide
+.vscode
+.idea
+*.swp
+*.swo
+
+# os
+.DS_Store
+Thumbs.db
+
+# misc
+.eslintcache
+dist.tgz

@@ -1,0 +1,54 @@
+{
+  "name": "agent-wrapper",
+  "version": "1.0.0",
+  "description": "A lightweight template for building AI agents with OpenAI Agents SDK. Simplify agent creation with minimal boilerplate code.",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build",
+    "test": "bun test"
+  },
+  "keywords": [
+    "openai",
+    "agents",
+    "ai",
+    "template",
+    "sdk",
+    "typescript"
+  ],
+  "author": "Your Name <your.email@example.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/openai-agent-template"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/openai-agent-template/issues"
+  },
+  "homepage": "https://github.com/yourusername/openai-agent-template#readme",
+  "engines": {
+    "node": ">=18.0.0",
+    "bun": ">=1.0.0"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^5"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@ai-sdk/openai-compatible": "^1.0.22",
+    "@openai/agents": "^0.1.10",
+    "@openai/agents-extensions": "^0.1.5",
+    "zod": "^4.1.12"
+  }
+}
