@@ -1,16 +1,19 @@
 # Agent Wrapper
 
-A powerful, lightweight SDK for building AI agents using the OpenAI Agents SDK. Features streaming, multi-agent handoffs, guardrails, and structured outputs.
+A powerful, lightweight SDK for building AI agents using the OpenAI Agents SDK. Works seamlessly with **OpenAI**, **Groq**, and any OpenAI-compatible API.
+
+[![npm version](https://img.shields.io/npm/v/agent_wrapper.svg)](https://www.npmjs.com/package/agent_wrapper)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## ✨ Features
 
 - 🚀 **Simple API** - Easy-to-use `AiAgent` class with sensible defaults
 - 🔄 **Streaming** - Real-time response streaming with `runStream()`
+- 🛠️ **Tool Support** - Create and use custom tools with `createTool()`
 - 🤝 **Multi-Agent** - Handoffs between specialized agents
-- 🛡️ **Guardrails** - Input/output validation for safety
-- 📊 **Structured Output** - Zod schema validation for typed responses
-- 💬 **Session Support** - Conversation history with `runWithHistory()`
-- 🔌 **OpenAI Compatible** - Works with OpenAI and compatible APIs
+- 🛡️ **Guardrails** - Input/output validation helpers
+- 💬 **Conversation History** - `runWithHistory()` for multi-turn chats
+- 🔌 **OpenAI Compatible** - Works with OpenAI, Groq, Ollama, and more
 - 📝 **TypeScript First** - Full type safety and excellent DX
 
 ## 📦 Installation
@@ -27,6 +30,8 @@ pnpm add agent_wrapper
 
 ## 🚀 Quick Start
 
+### Basic Usage
+
 ```typescript
 import { AiAgent } from 'agent_wrapper';
 
@@ -36,14 +41,65 @@ const agent = new AiAgent({
 });
 
 const result = await agent.run('What is the capital of France?');
-console.log(result);
+console.log(result); // "Paris"
+```
+
+### Using with Groq
+
+```typescript
+const agent = new AiAgent({
+  key: process.env.GROQ_API_KEY,
+  baseUrl: 'https://api.groq.com/openai/v1',
+  modelName: 'llama-3.3-70b-versatile',
+  instructions: 'You are a helpful assistant.',
+});
+
+const result = await agent.run('Hello!');
+```
+
+### Using Tools
+
+```typescript
+import { AiAgent, createTool } from 'agent_wrapper';
+import { z } from 'zod';
+
+const calculatorTool = createTool({
+  name: 'calculator',
+  description: 'Perform math calculations',
+  parameters: z.object({
+    operation: z.enum(['add', 'subtract', 'multiply', 'divide']),
+    a: z.number(),
+    b: z.number(),
+  }),
+  execute: async ({ operation, a, b }) => {
+    const ops = { add: a + b, subtract: a - b, multiply: a * b, divide: a / b };
+    return `Result: ${ops[operation]}`;
+  },
+});
+
+const agent = new AiAgent({
+  key: process.env.OPENAI_API_KEY,
+  instructions: 'Use the calculator for math.',
+  tools: [calculatorTool],
+});
+
+const result = await agent.run('What is 15 multiplied by 7?');
+// Tool is called automatically, returns "105"
+```
+
+### Streaming Responses
+
+```typescript
+for await (const event of agent.runStream('Tell me a story')) {
+  if (event.type === 'text') {
+    process.stdout.write(event.content || '');
+  }
+}
 ```
 
 ## 📚 API Reference
 
-### AiAgent
-
-The main class for creating and managing AI agents.
+### AiAgent Constructor
 
 ```typescript
 new AiAgent({
@@ -58,11 +114,8 @@ new AiAgent({
   tools?: Tool[],           // Callable tools
   handoffs?: Agent[],       // Agents to delegate to
   handoffDescription?: string,
-  inputGuardrails?: GuardrailFunction[],
-  outputGuardrails?: GuardrailFunction[],
-  outputType?: z.ZodSchema, // For structured output
   modelSettings?: {
-    temperature?: number,
+    temperature?: number,   // 0.0-2.0
     maxTokens?: number,
     topP?: number,
   },
@@ -70,57 +123,22 @@ new AiAgent({
 })
 ```
 
-#### Methods
+### Methods
 
-| Method | Description |
-|--------|-------------|
-| `run(input, options?)` | Run agent, return final output |
-| `runStream(input)` | Stream responses in real-time |
-| `runWithHistory(messages, options?)` | Run with conversation history |
-| `getAgent()` | Get underlying Agent instance |
+| Method | Description | Returns |
+|--------|-------------|---------|
+| `run(input, options?)` | Run agent, return final output | `Promise<string>` |
+| `runStream(input)` | Stream responses in real-time | `AsyncGenerator<StreamEvent>` |
+| `runWithHistory(messages)` | Run with conversation history | `Promise<string>` |
+| `getAgent()` | Get underlying Agent instance | `Agent` |
+
+### Helper Functions
+
+```typescript
+import { createTool, createInputGuardrail, createOutputGuardrail } from 'agent_wrapper';
+```
 
 ## 💡 Examples
-
-### Streaming Responses
-
-```typescript
-import { AiAgent } from 'agent_wrapper';
-
-const agent = new AiAgent({
-  key: process.env.OPENAI_API_KEY,
-  instructions: 'You are a creative storyteller.',
-});
-
-for await (const event of agent.runStream('Tell me a story')) {
-  if (event.type === 'text') {
-    process.stdout.write(event.content || '');
-  }
-}
-```
-
-### Using Tools
-
-```typescript
-import { AiAgent, createTool } from 'agent_wrapper';
-import { z } from 'zod';
-
-const weatherTool = createTool({
-  name: 'get_weather',
-  description: 'Get weather for a city',
-  parameters: z.object({
-    city: z.string().describe('City name'),
-  }),
-  execute: async ({ city }) => `Weather in ${city}: Sunny, 72°F`,
-});
-
-const agent = new AiAgent({
-  key: process.env.OPENAI_API_KEY,
-  instructions: 'You can check weather using the get_weather tool.',
-  tools: [weatherTool],
-});
-
-const result = await agent.run('What\'s the weather in Paris?');
-```
 
 ### Multi-Agent Handoffs
 
@@ -128,73 +146,50 @@ const result = await agent.run('What\'s the weather in Paris?');
 import { Agent } from '@openai/agents';
 import { AiAgent } from 'agent_wrapper';
 
-// Create specialist agents
 const billingAgent = new Agent({
   name: 'Billing',
   instructions: 'Handle billing questions.',
   handoffDescription: 'Billing specialist',
 });
 
-// Router agent delegates to specialists
 const router = new AiAgent({
   key: process.env.OPENAI_API_KEY,
   instructions: 'Route billing questions to Billing agent.',
   handoffs: [billingAgent],
 });
-
-const result = await router.run('I have a billing question');
 ```
 
-### Guardrails
-
-```typescript
-import { AiAgent, createInputGuardrail } from 'agent_wrapper';
-
-const blockMalicious = createInputGuardrail({
-  name: 'security_guard',
-  description: 'Block malicious input',
-  guardFunction: async (ctx, input) => ({
-    tripwireTriggered: input.includes('DROP TABLE'),
-    output: 'Blocked: Suspicious input',
-  }),
-});
-
-const agent = new AiAgent({
-  key: process.env.OPENAI_API_KEY,
-  instructions: 'You are a helpful assistant.',
-  inputGuardrails: [blockMalicious],
-});
-```
-
-### Conversation History
+### Custom API Provider (Ollama)
 
 ```typescript
 const agent = new AiAgent({
-  key: process.env.OPENAI_API_KEY,
+  key: 'ollama',  // Ollama doesn't need a real key
+  baseUrl: 'http://localhost:11434/v1',
+  modelName: 'llama3',
+  instructions: 'You are helpful.',
 });
+```
 
-const history = [
-  { role: 'user', content: 'My name is Alice' },
-  { role: 'assistant', content: 'Nice to meet you, Alice!' },
-  { role: 'user', content: 'What is my name?' },
-];
+## ✅ Tested & Verified
 
-const result = await agent.runWithHistory(history);
-// "Your name is Alice."
+This SDK has been tested with:
+- ✅ **Groq** - llama-3.3-70b-versatile
+- ✅ **OpenAI** - gpt-4o, gpt-4
+- ✅ **Tool Execution** - Custom tools work correctly
+- ✅ **Streaming** - Real-time response streaming
+
+Run the tests yourself:
+```bash
+bun run test-suite.ts      # 31 unit tests
+bun run test-live-groq.ts  # Live API tests
 ```
 
 ## 🔄 Migration from 0.1.x
 
 ```diff
-import AiAgent from 'agent_wrapper';
-
-const agent = new AiAgent({ ... });
-
 - const result = await agent.runAgent('Hello');
 + const result = await agent.run('Hello');
 ```
-
-The `runAgent()` method still works but is deprecated.
 
 ## 📋 Dependencies
 
@@ -212,4 +207,4 @@ Contributions welcome! See [GitHub Issues](https://github.com/mbittu000/agent_wr
 
 ---
 
-**Version:** 0.2.0 | **Author:** mbittu000
+**Version:** 0.2.0 | **Author:** mbittu000 | [GitHub](https://github.com/mbittu000/agent_wrapper)

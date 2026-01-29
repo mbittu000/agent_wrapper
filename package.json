@@ -1,6 +1,6 @@
 {
   "name": "agent_wrapper",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A powerful, lightweight SDK for building AI agents with OpenAI Agents SDK. Supports streaming, multi-agent handoffs, guardrails, and structured outputs.",
   "type": "module",
   "main": "dist/index.js",
