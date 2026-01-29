@@ -1,11 +1,19 @@
 {
   "name": "agent_wrapper",
-  "version": "0.1.0",
-  "description": "A lightweight template for building AI agents with OpenAI Agents SDK. Simplify agent creation with minimal boilerplate code.",
+  "version": "0.2.0",
+  "description": "A powerful, lightweight SDK for building AI agents with OpenAI Agents SDK. Supports streaming, multi-agent handoffs, guardrails, and structured outputs.",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "sideEffects": false,
   "files": [
     "dist",
     "README.md",
@@ -14,7 +22,8 @@
   "scripts": {
     "build": "tsc",
     "prepublishOnly": "npm run build",
-    "test": "bun test"
+    "test": "bun test",
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [
     "openai",
@@ -25,7 +34,11 @@
     "sdk",
     "typescript",
     "ai-agent",
-    "openai-sdk"
+    "openai-sdk",
+    "multi-agent",
+    "streaming",
+    "guardrails",
+    "handoffs"
   ],
   "author": "mbittu000",
   "license": "MIT",
@@ -38,11 +51,12 @@
   },
   "homepage": "https://github.com/mbittu000/agent_wrapper#readme",
   "engines": {
-    "node": ">=18.0.0",
+    "node": ">=22.0.0",
     "bun": ">=1.0.0"
   },
   "devDependencies": {
     "@types/bun": "latest",
+    "@types/node": "^22",
     "typescript": "^5"
   },
   "peerDependencies": {
@@ -50,7 +64,7 @@
   },
   "dependencies": {
     "@ai-sdk/openai-compatible": "^1.0.22",
-    "@openai/agents": "^0.1.10",
+    "@openai/agents": "^0.2.1",
     "@openai/agents-extensions": "^0.1.5",
     "zod": "^4.1.12"
   }
