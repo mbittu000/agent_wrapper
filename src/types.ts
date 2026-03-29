@@ -112,3 +112,6 @@ export interface Message {
 export type Agent = OpenAIAgent<unknown>;
 export type Tool = OpenAITool;
 export type RunContext = OpenAIRunContext<unknown>;
+
+// Re-export from agents-core
+export type { Model, ModelSettings as CoreModelSettings, Runner, StreamedRunResult, RunResult } from '@openai/agents-core';

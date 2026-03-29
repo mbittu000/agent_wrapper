@@ -1,7 +1,7 @@
-import { Agent, run, setTracingDisabled } from '@openai/agents';
-import type { Tool, StreamedRunResult } from '@openai/agents';
+import { Agent, run, setTracingDisabled, type Tool } from '@openai/agents';
+import { user, system, assistant } from '@openai/agents';
 import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
-import { aisdk } from '@openai/agents-extensions';
+import { aisdk } from '@openai/agents-extensions/ai-sdk';
 import type {
     AiAgentOptions,
     RunOptions,
@@ -143,7 +143,7 @@ export class AiAgent {
      * ```
      */
     async *runStream(input: string): AsyncGenerator<StreamEvent> {
-        const streamedResult = await run(this._agent, input, { stream: true }) as StreamedRunResult<unknown, Agent<unknown>>;
+        const streamedResult = await run(this._agent, input, { stream: true });
 
         // Stream events as they come in
         for await (const event of streamedResult) {
@@ -232,11 +232,15 @@ export class AiAgent {
         messages: Message[],
         options?: RunOptions
     ): Promise<string | undefined> {
-        // Convert messages to the format expected by the SDK
-        const formattedMessages = messages.map((msg) => ({
-            role: msg.role,
-            content: msg.content,
-        }));
+        const formattedMessages = messages.map((msg) => {
+            if (msg.role === 'user') {
+                return user(msg.content);
+            } else if (msg.role === 'assistant') {
+                return assistant(msg.content);
+            } else {
+                return system(msg.content);
+            }
+        });
 
         const result = await run(this._agent, formattedMessages, {
             maxTurns: options?.maxTurns,
